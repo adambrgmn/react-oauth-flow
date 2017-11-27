@@ -6,7 +6,7 @@ import type { UrlParams } from '../types';
 
 type RenderProps = {
   processing: boolean,
-  state?: UrlParams,
+  state: ?UrlParams,
   error: ?Error,
 };
 
@@ -17,21 +17,26 @@ type Props = {
   clientSecret: string,
   location?: { search: string },
   querystring?: string,
-  render: RenderProps => React.Node,
-  onAuthSuccess: ({
+  onAuthSuccess?: (
     accessToken: string,
-    info: { [key: string]: any },
-  }) => void,
+    response: { [key: string]: any },
+  ) => void,
+  onAuthError?: (error: Error) => void,
+  render?: RenderProps => React.Node,
+  component?: React.ComponentType<RenderProps>,
+  children?: RenderProps => React.Node,
 };
 
 type State = {
   processing: boolean,
+  state: ?UrlParams,
   error: ?Error,
 };
 
 export class OauthReceiver extends React.Component<Props, State> {
   state = {
     processing: true,
+    state: null,
     error: null,
   };
 
@@ -40,42 +45,81 @@ export class OauthReceiver extends React.Component<Props, State> {
   }
 
   getAuthorizationCode = async () => {
-    const { baseUrl, clientId, clientSecret, redirectUri } = this.props;
-
-    const { code } = this.parseQuerystring();
-    const url = buildURL(`${baseUrl}/oauth2/token`, {
-      code,
-      grant_type: 'authorization_code',
-      client_id: clientId,
-      client_secret: clientSecret,
-      redirect_uri: redirectUri,
-    });
-
     try {
-      const res = await fetch(url, { method: 'POST' });
-      const json = await res.json();
-      const { access_token: accessToken, ...rest } = json;
+      const {
+        baseUrl,
+        clientId,
+        clientSecret,
+        redirectUri,
+        onAuthSuccess,
+      } = this.props;
+
+      const { error, error_description, code, state } = this.parseQuerystring();
+      this.setState(() => ({ state }));
+
+      if (error != null) {
+        const err = new Error(error_description);
+        throw err;
+      }
+
+      const url = buildURL(`${baseUrl}/oauth2/token`, {
+        code,
+        grant_type: 'authorization_code',
+        client_id: clientId,
+        client_secret: clientSecret,
+        redirect_uri: redirectUri,
+      });
+
+      const res = await window.fetch(url, { method: 'POST' });
+      const response = await res.json();
+      const accessToken: string = response.access_token;
+
+      if (typeof onAuthSuccess === 'function') {
+        onAuthSuccess(accessToken, response);
+      }
+
+      this.setState(() => ({ processing: false }));
     } catch (error) {
       this.handleError(error);
     }
   };
 
   handleError = (error: Error) => {
+    const { onAuthError } = this.props;
+
     this.setState(() => ({ error }));
+    if (typeof onAuthError === 'function') {
+      onAuthError(error);
+    }
   };
 
-  parseQuerystring = (): { code: string, state?: UrlParams } => {
+  parseQuerystring = () => {
     const { location, querystring } = this.props;
+    let search;
 
-    if (location != null) return qs.parse(location.search);
-    if (querystring != null) return qs.parse(querystring);
+    if (location != null) {
+      search = location.search; // eslint-disable-line
+    } else if (querystring != null) {
+      search = querystring;
+    } else {
+      search = window.location.search; // eslint-disable-line
+    }
 
-    const { search } = window.location;
     return qs.parse(search);
   };
 
   render() {
-    const { processing, error } = this.state;
-    return this.props.render({ processing, error });
+    const { component, render, children } = this.props;
+    const { processing, state, error } = this.state;
+
+    if (component != null)
+      return React.createElement(component, { processing, state, error });
+    if (render != null) return render({ processing, state, error });
+    if (children != null) {
+      React.Children.only(children);
+      return children({ processing, state, error });
+    }
+
+    return null;
   }
 }

@@ -26,12 +26,15 @@
     "lint-staged": "^5.0.0",
     "prettier": "^1.8.2",
     "react-dom": "^16.1.1",
+    "react-scripts": "^1.0.17",
     "react-test-renderer": "^16.1.1"
   },
   "dependencies": {
     "qs": "^6.5.1",
-    "react": "^16.1.1",
-    "react-scripts": "^1.0.17"
+    "react": "^16.1.1"
+  },
+  "peerDependencies": {
+    "react": "^16.0.0"
   },
   "lint-staged": {
     "*.js": ["prettier --single-quote --trailing-comma all --write", "git add"],
