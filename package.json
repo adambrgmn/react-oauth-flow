@@ -6,19 +6,14 @@
   "author": "Adam Bergman <adam@fransvilhelm.com>",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
+    "test": "react-scripts test --env=jsdom",
     "flow": "flow",
     "precommit": "lint-staged"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.2",
-    "babel-jest": "^21.2.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-flow": "^6.23.0",
-    "babel-preset-react": "^6.24.1",
+    "enzyme": "^3.2.0",
+    "enzyme-adapter-react-16": "^1.1.0",
     "eslint": "^4.12.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
@@ -28,19 +23,19 @@
     "eslint-plugin-react": "^7.5.1",
     "flow-bin": "^0.59.0",
     "husky": "^0.14.3",
-    "jest": "^21.2.1",
     "lint-staged": "^5.0.0",
     "prettier": "^1.8.2",
-    "react-dom": "^16.1.1"
+    "react-dom": "^16.1.1",
+    "react-test-renderer": "^16.1.1"
   },
   "dependencies": {
     "qs": "^6.5.1",
-    "react": "^16.1.1"
+    "react": "^16.1.1",
+    "react-scripts": "^1.0.17"
   },
   "lint-staged": {
     "*.js": ["prettier --single-quote --trailing-comma all --write", "git add"],
     "*.json": ["prettier --write", "git add"],
-    "*.css": ["prettier --write", "git add"],
     "*.md": ["prettier --write", "git add"]
   }
 }
