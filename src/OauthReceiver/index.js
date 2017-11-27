@@ -112,9 +112,14 @@ export class OauthReceiver extends React.Component<Props, State> {
     const { component, render, children } = this.props;
     const { processing, state, error } = this.state;
 
-    if (component != null)
+    if (component != null) {
       return React.createElement(component, { processing, state, error });
-    if (render != null) return render({ processing, state, error });
+    }
+
+    if (render != null) {
+      return render({ processing, state, error });
+    }
+
     if (children != null) {
       React.Children.only(children);
       return children({ processing, state, error });
