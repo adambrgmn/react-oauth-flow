@@ -3,31 +3,7 @@ import * as React from 'react';
 import qs from 'qs';
 import { buildURL } from '../utils';
 import { fetch } from '../utils/fetch';
-import type { UrlParams } from '../types';
-
-type RenderProps = {
-  processing: boolean,
-  state: ?UrlParams,
-  error: ?Error,
-};
-
-type Props = {
-  baseUrl: string,
-  clientId: string,
-  clientSecret: string,
-  redirectUri: string,
-  tokenEndpoint: string,
-  location?: { search: string },
-  querystring?: string,
-  onAuthSuccess?: (
-    accessToken: string,
-    response: { [key: string]: any },
-  ) => void,
-  onAuthError?: (error: Error) => void,
-  render?: RenderProps => React.Node,
-  component?: React.ComponentType<RenderProps>,
-  children?: RenderProps => React.Node,
-};
+import type { ReceiverProps, UrlParams } from '../types';
 
 type State = {
   processing: boolean,
@@ -35,7 +11,7 @@ type State = {
   error: ?Error,
 };
 
-export class OauthReceiver extends React.Component<Props, State> {
+export class OauthReceiver extends React.Component<ReceiverProps, State> {
   static defaultProps = {
     tokenEndpoint: '/oauth2/token',
   };

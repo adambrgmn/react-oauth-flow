@@ -7,6 +7,12 @@
     "jest": true
   },
   "rules": {
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "peerDependencies": true
+      }
+    ],
     "import/prefer-default-export": 0,
     "react/jsx-filename-extension": 0
   }
