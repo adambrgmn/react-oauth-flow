@@ -8,15 +8,25 @@ test('Component: <OauthSender />', () => {
     baseUrl: 'https://www.service.com',
     clientId: 'abc',
     redirectUri: 'https://www.test.com/redirect',
-    render: ({ url }) => (
+    render: (
+      { url }, // eslint-disable-line
+    ) => (
       <a className="link" href={url}>
         Connect
       </a>
-    ), // eslint-disable-line
+    ),
   };
 
   const wrapper = shallow(<OauthSender {...props} />);
-  const expectedUrl = buildURL(`${props.baseUrl}/oauth2/authorize`, {
+  let expectedUrl = buildURL(`${props.baseUrl}/oauth2/authorize`, {
+    client_id: props.clientId,
+    redirect_uri: props.redirectUri,
+  });
+
+  expect(wrapper.find('.link').prop('href')).toEqual(expectedUrl);
+
+  wrapper.setProps({ ...props, authorizeEndpoint: '/oauth2/auth' });
+  expectedUrl = buildURL(`${props.baseUrl}/oauth2/auth`, {
     client_id: props.clientId,
     redirect_uri: props.redirectUri,
   });

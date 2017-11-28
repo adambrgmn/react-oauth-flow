@@ -2,6 +2,7 @@
 import * as React from 'react';
 import qs from 'qs';
 import { buildURL } from '../utils';
+import { fetch } from '../utils/fetch';
 import type { UrlParams } from '../types';
 
 type RenderProps = {
@@ -12,9 +13,10 @@ type RenderProps = {
 
 type Props = {
   baseUrl: string,
-  redirectUri: string,
   clientId: string,
   clientSecret: string,
+  redirectUri: string,
+  tokenEndpoint: string,
   location?: { search: string },
   querystring?: string,
   onAuthSuccess?: (
@@ -34,6 +36,10 @@ type State = {
 };
 
 export class OauthReceiver extends React.Component<Props, State> {
+  static defaultProps = {
+    tokenEndpoint: '/oauth2/token',
+  };
+
   state = {
     processing: true,
     state: null,
@@ -51,6 +57,7 @@ export class OauthReceiver extends React.Component<Props, State> {
         clientId,
         clientSecret,
         redirectUri,
+        tokenEndpoint,
         onAuthSuccess,
       } = this.props;
 
@@ -62,7 +69,7 @@ export class OauthReceiver extends React.Component<Props, State> {
         throw err;
       }
 
-      const url = buildURL(`${baseUrl}/oauth2/token`, {
+      const url = buildURL(`${baseUrl}${tokenEndpoint}`, {
         code,
         grant_type: 'authorization_code',
         client_id: clientId,
@@ -70,8 +77,7 @@ export class OauthReceiver extends React.Component<Props, State> {
         redirect_uri: redirectUri,
       });
 
-      const res = await window.fetch(url, { method: 'POST' });
-      const response = await res.json();
+      const response = await fetch(url, { method: 'POST' });
       const accessToken: string = response.access_token;
 
       if (typeof onAuthSuccess === 'function') {
@@ -86,6 +92,7 @@ export class OauthReceiver extends React.Component<Props, State> {
 
   handleError = (error: Error) => {
     const { onAuthError } = this.props;
+    if (process.env.NODE_ENV === 'test') console.error(error.message);
 
     this.setState(() => ({ error }));
     if (typeof onAuthError === 'function') {
