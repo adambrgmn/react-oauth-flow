@@ -92,7 +92,6 @@ export class OauthReceiver extends React.Component<Props, State> {
 
   handleError = (error: Error) => {
     const { onAuthError } = this.props;
-    if (process.env.NODE_ENV === 'test') console.error(error.message);
 
     this.setState(() => ({ error }));
     if (typeof onAuthError === 'function') {
