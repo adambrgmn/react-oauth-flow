@@ -9,6 +9,7 @@
 * [Usage](#usage)
   * [`<OauthSender />`](#oauthsender-)
   * [`<OauthReceiver />`](#oauthreceiver-)
+  * [`createOauthFlow`](#createoauthflow)
 * [License](#license)
 * [Contributors](#contributors)
 
@@ -228,6 +229,19 @@ provides you with a `location`-prop with all the information that
 `querystring` can be used if you want some control over the process, but
 basically it is `window.location.search`. So if it is not provided
 `<OauthReceiver />` will fetch the information from `window.location.search`.
+
+### `createOauthFlow`
+
+```js
+import { createOauthFlow } from 'react-oauth-flow';
+
+const { Sender, Receiver } = createOauthFlow({
+  baseUrl: 'https://www.dropbox.com',
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  redirectUri: 'https://www.yourapp.com/auth/dropbox',
+});
+```
 
 ## License
 
