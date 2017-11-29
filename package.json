@@ -13,6 +13,7 @@
     "lint": "frans-scripts lint",
     "format": "frans-scripts format",
     "validate": "frans-scripts validate",
+    "add-contributor": "frans-scripts contributors add",
     "precommit": "frans-scripts precommit",
     "travis-after-success": "frans-scripts travis-after-success"
   },
