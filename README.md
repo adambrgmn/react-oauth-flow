@@ -10,6 +10,7 @@
   * [`<OauthSender />`](#oauthsender-)
   * [`<OauthReceiver />`](#oauthreceiver-)
   * [`createOauthFlow`](#createoauthflow)
+  * [Args](#args)
 * [License](#license)
 * [Contributors](#contributors)
 
@@ -241,7 +242,24 @@ const { Sender, Receiver } = createOauthFlow({
   clientSecret: process.env.CLIENT_SECRET,
   redirectUri: 'https://www.yourapp.com/auth/dropbox',
 });
+
+export { Sender, Receiver };
 ```
+
+`createOauthFlow` is a shorthand to create instances of both `<OauthSender />`
+and `<OauthReceiver />` with equal settings.
+
+These instances can then be used as described above. All arguments can also be
+overridden when you use the created components.
+
+### Args
+
+| Arg                    | Type     | Required | Description                                                                |
+| :--------------------- | :------- | :------- | :------------------------------------------------------------------------- |
+| `options`              | `object` | yes      | Options object                                                             |
+| `options.baseUrl`      | `string` | yes      | Base url of your OAuth2 service provider                                   |
+| `options.clientId`     | `string` | yes      | Your client id from the service provider (remember to keep it secret!)     |
+| `options.clientSecret` | `string` | yes      | Your client secret from the service provider (remember to keep it secret!) |
 
 ## License
 
