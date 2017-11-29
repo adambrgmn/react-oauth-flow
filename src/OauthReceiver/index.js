@@ -1,12 +1,34 @@
 // @flow
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import qs from 'qs';
 import { buildURL } from '../utils';
 import { fetch } from '../utils/fetch';
 
 export class OauthReceiver extends React.Component {
+  static propTypes = {
+    baseUrl: PropTypes.string.isRequired,
+    clientId: PropTypes.string.isRequired,
+    clientSecret: PropTypes.string.isRequired,
+    redirectUri: PropTypes.string.isRequired,
+    tokenEndpoint: PropTypes.string,
+    location: PropTypes.shape({ search: PropTypes.string.isRequired }),
+    querystring: PropTypes.string.isRequired,
+    onAuthSuccess: PropTypes.func,
+    onAuthError: PropTypes.func,
+    render: PropTypes.func,
+    component: PropTypes.element,
+    children: PropTypes.func,
+  };
+
   static defaultProps = {
     tokenEndpoint: '/oauth2/token',
+    location: null,
+    onAuthSuccess: null,
+    onAuthError: null,
+    render: null,
+    component: null,
+    children: null,
   };
 
   state = {
@@ -59,7 +81,7 @@ export class OauthReceiver extends React.Component {
     }
   };
 
-  handleError = (error) => {
+  handleError = error => {
     const { onAuthError } = this.props;
 
     this.setState(() => ({ error }));

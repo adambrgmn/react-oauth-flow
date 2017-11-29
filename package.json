@@ -21,6 +21,7 @@
     "enzyme": "^3.2.0",
     "enzyme-adapter-react-16": "^1.1.0",
     "frans-scripts": "^1.0.1",
+    "prop-types": "^15.6.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1"
   },
@@ -28,7 +29,8 @@
     "qs": "^6.5.1"
   },
   "peerDependencies": {
-    "react": ">=16"
+    "react": ">=15",
+    "prop-types": ">=15"
   },
   "config": {
     "commitizen": {
