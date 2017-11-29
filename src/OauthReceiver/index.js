@@ -72,7 +72,7 @@ export class OauthReceiver extends React.Component {
       const accessToken = response.access_token;
 
       if (typeof onAuthSuccess === 'function') {
-        onAuthSuccess(accessToken, response);
+        onAuthSuccess(accessToken, { response, state });
       }
 
       this.setState(() => ({ processing: false }));
