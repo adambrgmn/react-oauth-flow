@@ -12,6 +12,14 @@ export class OauthReceiver extends React.Component {
     clientSecret: PropTypes.string.isRequired,
     redirectUri: PropTypes.string.isRequired,
     tokenEndpoint: PropTypes.string,
+    args: PropTypes.objectOf(
+      PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.bool,
+        PropTypes.object,
+      ]),
+    ),
     location: PropTypes.shape({ search: PropTypes.string.isRequired }),
     querystring: PropTypes.string.isRequired,
     onAuthSuccess: PropTypes.func,
@@ -23,6 +31,7 @@ export class OauthReceiver extends React.Component {
 
   static defaultProps = {
     tokenEndpoint: '/oauth2/token',
+    args: {},
     location: null,
     onAuthSuccess: null,
     onAuthError: null,
@@ -49,6 +58,7 @@ export class OauthReceiver extends React.Component {
         clientSecret,
         redirectUri,
         tokenEndpoint,
+        args,
         onAuthSuccess,
       } = this.props;
 
@@ -66,6 +76,7 @@ export class OauthReceiver extends React.Component {
         client_id: clientId,
         client_secret: clientSecret,
         redirect_uri: redirectUri,
+        ...args,
       });
 
       const response = await fetch(url, { method: 'POST' });

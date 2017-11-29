@@ -48,14 +48,17 @@ test('Component <OauthReceiver />', async () => {
   expect(wrapper.find('.processing').text()).toBe('no');
   expect(wrapper.find('.state').text()).toBe('/settings');
 
-  // const successCall = onAuthSuccess.mock.calls[0];
-  // expect(onAuthSuccess.mock.calls.length).toBe(1);
-  // expect(successCall[0]).toBe('123');
-  // expect(successCall[1]).toEqual({
-  //   access_token: '123',
-  //   token_type: 'bearer',
-  //   account_id: '123456',
-  // });
+  const successCall = onAuthSuccess.mock.calls[0];
+  expect(onAuthSuccess.mock.calls.length).toBe(1);
+  expect(successCall[0]).toBe('123');
+  expect(successCall[1]).toEqual({
+    response: {
+      access_token: '123',
+      token_type: 'bearer',
+      account_id: '123456',
+    },
+    state: { from: '/settings' },
+  });
 
-  // expect(onAuthError.mock.calls.length).toBe(0);
+  expect(onAuthError.mock.calls.length).toBe(0);
 });
