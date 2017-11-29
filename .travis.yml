@@ -1,0 +1,13 @@
+language: node_js
+cache:
+  directories:
+    - ~/.npm
+notifications:
+  email: false
+node_js:
+  - '8'
+script: npm run validate
+after_success: npm run travis-after-success
+branches:
+  only:
+    - master
