@@ -10,7 +10,7 @@ export function createOauthFlow(
     redirectUri,
     authorizeEndpoint = '/oauth2/authorize',
     tokenEndpoint = '/oauth2/token',
-  } {},
+  } = {},
 ) {
   const Sender = props => (
     <OauthSender
