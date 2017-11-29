@@ -1,9 +1,8 @@
 // @flow
 import * as React from 'react';
 import { buildURL } from '../utils';
-import type { SenderProps } from '../types';
 
-export class OauthSender extends React.Component<SenderProps, *> {
+export class OauthSender extends React.Component {
   static defaultProps = {
     authorizeEndpoint: '/oauth2/authorize',
   };

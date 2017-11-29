@@ -3,15 +3,8 @@ import * as React from 'react';
 import qs from 'qs';
 import { buildURL } from '../utils';
 import { fetch } from '../utils/fetch';
-import type { ReceiverProps, UrlParams } from '../types';
 
-type State = {
-  processing: boolean,
-  state: ?UrlParams,
-  error: ?Error,
-};
-
-export class OauthReceiver extends React.Component<ReceiverProps, State> {
+export class OauthReceiver extends React.Component {
   static defaultProps = {
     tokenEndpoint: '/oauth2/token',
   };
@@ -54,7 +47,7 @@ export class OauthReceiver extends React.Component<ReceiverProps, State> {
       });
 
       const response = await fetch(url, { method: 'POST' });
-      const accessToken: string = response.access_token;
+      const accessToken = response.access_token;
 
       if (typeof onAuthSuccess === 'function') {
         onAuthSuccess(accessToken, response);
@@ -66,7 +59,7 @@ export class OauthReceiver extends React.Component<ReceiverProps, State> {
     }
   };
 
-  handleError = (error: Error) => {
+  handleError = (error) => {
     const { onAuthError } = this.props;
 
     this.setState(() => ({ error }));
