@@ -10,7 +10,6 @@
   * [`<OauthSender />`](#oauthsender-)
   * [`<OauthReceiver />`](#oauthreceiver-)
   * [`createOauthFlow`](#createoauthflow)
-  * [Args](#args)
 * [License](#license)
 * [Contributors](#contributors)
 
@@ -30,6 +29,17 @@ authorization process once the user is back on your site.
 ```sh
 npm install react-oauth-flow
 yarn add react-oauth-flow
+```
+
+There is also a umd-build available for usage directly inside a browser, via
+`https://unkpg.com/react-oauth-flow/dist/react-oauth-flow.umd.min.js`.
+
+```html
+<script src="https://unkpg.com/react-oauth-flow/dist/react-oauth-flow.umd.min.js"></script>
+<script>
+  // The umd-build exports a global variable ReactOauthFlow
+  const { createOauthFlow, OauthSender, OauthReceiver } = ReactOauthFlow;
+</script>
 ```
 
 ## Usage
@@ -60,19 +70,19 @@ service.
 
 #### Props
 
-| Prop                | Type     | Required | Default             | Description                                                                                        |
-| :------------------ | :------- | :------- | :------------------ | :------------------------------------------------------------------------------------------------- |
-| `baseUrl`           | `string` | yes      | -                   | Base url of your OAuth2 service provider                                                           |
-| `clientId`          | `string` | yes      | -                   | Your client id from the service provider (remember to keep it secret!)                             |
-| `redirectUri`       | `string` | yes      | -                   | The URL where the provider should redirect your users back                                         |
-| `authorizeEndpoint` | `string` | no       | `/oauth2/authorize` | Endpoint for authorization at your provider                                                        |
-| `state`             | `object` | no       | -                   | Additional state to get back from the service provider [(read more below)](#state)                 |
-| `args`              | `object` | no       | -                   | Additional args to send service provider. Will be serialized by [qs](https://github.com/ljharb/qs) |
+| Prop                | Type     | Required | Default             | Description                                                                                                         |
+| :------------------ | :------- | :------- | :------------------ | :------------------------------------------------------------------------------------------------------------------ |
+| `baseUrl`           | `string` | yes      | -                   | Base url of your OAuth2 service provider                                                                            |
+| `clientId`          | `string` | yes      | -                   | Your client id from the service provider (remember to keep it secret!)                                              |
+| `redirectUri`       | `string` | yes      | -                   | The URL where the provider should redirect your users back                                                          |
+| `authorizeEndpoint` | `string` | no       | `/oauth2/authorize` | Endpoint for authorization at your provider                                                                         |
+| `state`             | `object` | no       | -                   | Additional state to get back from the service provider [(read more below)](#state)                                  |
+| `args`              | `object` | no       | -                   | Additional args to send to service provider, e.g. `scope`. Will be serialized by [qs](https://github.com/ljharb/qs) |
 
 #### Render
 
 `<OauthSender />` can be used in three ways, either by a render-prop,
-children-function or component-prop. In either way the will recieve the
+children-function or component-prop. In either way they will recieve the
 generated `url` as a prop/arg.
 
 ```js
@@ -90,9 +100,9 @@ const ComponentProp = props => <OauthSender {...props} component={Link} />;
 
 #### State
 
-You can pase some state along with the auth process. This state will be sent
-back by the OAuth-provider once the process is done. This state can then be used
-to redirect the user back to where they started the auth process.
+You can pass some state along with the auth process. This state will be sent
+back by the OAuth-provider once the process is done. This state can for example
+then be used to redirect the user back to where they started the auth process.
 
 ### `<OauthReceiver />`
 
@@ -101,10 +111,10 @@ import React, { Component } from 'react';
 import { OauthReceiver } from 'react-oauth-flow';
 
 export default class ReceiveFromDropbox extends Component {
-  handleSuccess = (accessToken, { response, state }) => {
+  handleSuccess = async (accessToken, { response, state }) => {
     console.log('Successfully authorized');
-    getProfileFromDropbox(accessToken);
-    redirect(state.from);
+    await setProfileFromDropbox(accessToken);
+    await redirect(state.from);
   };
 
   handleError = error => {
@@ -140,16 +150,16 @@ redirected from the OAuth2-provider.
 
 #### Props
 
-| Prop            | Type                 | Required | Default         | Description                                                                                |
-| :-------------- | :------------------- | :------- | :-------------- | :----------------------------------------------------------------------------------------- |
-| `baseUrl`       | `string`             | yes      | -               | Base url of your OAuth2 service provider                                                   |
-| `clientId`      | `string`             | yes      | -               | Your client id from the service provider (remember to keep it secret!)                     |
-| `clientSecret`  | `string`             | yes      | -               | Your client secret from the service provider (remember to keep it secret!)                 |
-| `redirectUri`   | `string`             | yes      | -               | The URL where the provider has redirected your user (used to verify auth)                  |
-| `tokenEndpoint` | `string`             | no       | `/oauth2/token` | Endpoint for authorization at your provider                                                |
-| `args`          | `object`             | no       | -               | Args will be attatched to the request to the token endpoint. Must be serializeable by `qz` |
-| `location`      | `{ search: string }` | no       | -               | Used to extract info from querystring [(read more below)](#location-and-querystring)       |
-| `querystring`   | `string`             | no       | -               | Used to extract info from querystring [(read more below)](#location-and-querystring)       |
+| Prop            | Type                 | Required | Default         | Description                                                                             |
+| :-------------- | :------------------- | :------- | :-------------- | :-------------------------------------------------------------------------------------- |
+| `baseUrl`       | `string`             | yes      | -               | Base url of your OAuth2 service provider                                                |
+| `clientId`      | `string`             | yes      | -               | Your client id from the service provider (remember to keep it secret!)                  |
+| `clientSecret`  | `string`             | yes      | -               | Your client secret from the service provider (remember to keep it secret!)              |
+| `redirectUri`   | `string`             | yes      | -               | The URL where the provider has redirected your user (used to verify auth)               |
+| `tokenEndpoint` | `string`             | no       | `/oauth2/token` | Endpoint for authorization at your provider                                             |
+| `args`          | `object`             | no       | -               | Args will be attatched to the request to the token endpoint. Will be serialized by `qz` |
+| `location`      | `{ search: string }` | no       | -               | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
+| `querystring`   | `string`             | no       | -               | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
 
 #### Events
 
@@ -159,19 +169,19 @@ redirected from the OAuth2-provider.
 | :---------------- | :------- | :----------------------------------------------------------- |
 | `accessToken`     | `string` | Access token recieved from OAuth2 provider                   |
 | `result`          | `object` |                                                              |
-| `result.response` | `object` | The full response from call to the token-endpoint            |
+| `result.response` | `object` | The full response from the call to the token-endpoint        |
 | `result.state`    | `object` | The state recieved from provider, if it was provided earlier |
 
 * `onAuthError(error)`
 
 | Arg     | Type    | Description                                        |
 | :------ | :------ | :------------------------------------------------- |
-| `error` | `Error` | Error with message as description of waht happened |
+| `error` | `Error` | Error with message as description of what happened |
 
 #### Render
 
 `<OauthReceiver />` can be used in three ways, either by a render-prop,
-children-function or component-prop. In either way the will recieve three
+children-function or component-prop. Either way they will recieve three
 props/args:
 
 * `processing: boolean`: True if authorization is in progress
@@ -217,7 +227,7 @@ const ComponentProp = props => <OauthReceiver {...props} component={View} />;
 #### `location` and `querystring`
 
 The props `location` and `querystring` actually do the same thing but both can
-be ommitted. But what the do is still important. When the OAuth-provider
+be ommitted. But what they do is still important. When the OAuth2-provider
 redirects your users back to your app they do so with a querystring attatched to
 the call. `<OauthReceiver />` parses this string to extract information that it
 needs to request an access token.
@@ -228,7 +238,7 @@ provides you with a `location`-prop with all the information that
 `<OauthReceiver />` needs.
 
 `querystring` can be used if you want some control over the process, but
-basically it is `window.location.search`. So if it is not provided
+basically it's `window.location.search`. So if it is not provided
 `<OauthReceiver />` will fetch the information from `window.location.search`.
 
 ### `createOauthFlow`
@@ -247,19 +257,21 @@ export { Sender, Receiver };
 ```
 
 `createOauthFlow` is a shorthand to create instances of both `<OauthSender />`
-and `<OauthReceiver />` with equal settings.
+and `<OauthReceiver />` with equal settings to keep things DRY.
 
 These instances can then be used as described above. All arguments can also be
 overridden when you use the created components.
 
-### Args
+#### Args
 
-| Arg                    | Type     | Required | Description                                                                |
-| :--------------------- | :------- | :------- | :------------------------------------------------------------------------- |
-| `options`              | `object` | yes      | Options object                                                             |
-| `options.baseUrl`      | `string` | yes      | Base url of your OAuth2 service provider                                   |
-| `options.clientId`     | `string` | yes      | Your client id from the service provider (remember to keep it secret!)     |
-| `options.clientSecret` | `string` | yes      | Your client secret from the service provider (remember to keep it secret!) |
+| Arg                         | Type     | Required | Default             | Description                                                                |
+| :-------------------------- | :------- | :------- | :------------------ | :------------------------------------------------------------------------- |
+| `options`                   | `object` | yes      | -                   | Options object                                                             |
+| `options.baseUrl`           | `string` | yes      | -                   | Base url of your OAuth2 service provider                                   |
+| `options.clientId`          | `string` | yes      | -                   | Your client id from the service provider (remember to keep it secret!)     |
+| `options.clientSecret`      | `string` | yes      | -                   | Your client secret from the service provider (remember to keep it secret!) |
+| `options.authorizeEndpoint` | `string` | no       | `/oauth2/authorize` | Endpoint to send users to authorize                                        |
+| `options.tokenEndpoint`     | `string` | no       | `/oauth2/token`     | Endpoint to send token request to                                          |
 
 ## License
 
