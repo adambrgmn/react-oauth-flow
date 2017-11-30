@@ -1,11 +1,42 @@
 // @flow
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import { buildURL } from '../utils';
-import type { SenderProps } from '../types';
 
-export class OauthSender extends React.Component<SenderProps, *> {
+export class OauthSender extends React.Component {
+  static propTypes = {
+    baseUrl: PropTypes.string.isRequired,
+    clientId: PropTypes.string.isRequired,
+    redirectUri: PropTypes.string.isRequired,
+    authorizeEndpoint: PropTypes.string,
+    state: PropTypes.objectOf(
+      PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.bool,
+        PropTypes.object,
+      ]),
+    ),
+    args: PropTypes.objectOf(
+      PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.bool,
+        PropTypes.object,
+      ]),
+    ),
+    render: PropTypes.func,
+    component: PropTypes.element,
+    children: PropTypes.func,
+  };
+
   static defaultProps = {
     authorizeEndpoint: '/oauth2/authorize',
+    state: null,
+    args: null,
+    render: null,
+    component: null,
+    children: null,
   };
 
   render() {
@@ -24,6 +55,7 @@ export class OauthSender extends React.Component<SenderProps, *> {
     const url = buildURL(`${baseUrl}${authorizeEndpoint}`, {
       client_id: clientId,
       redirect_uri: redirectUri,
+      response_type: 'code',
       state: state || {},
       args: args || {},
     });

@@ -52,9 +52,12 @@ test('Component <OauthReceiver />', async () => {
   expect(onAuthSuccess.mock.calls.length).toBe(1);
   expect(successCall[0]).toBe('123');
   expect(successCall[1]).toEqual({
-    access_token: '123',
-    token_type: 'bearer',
-    account_id: '123456',
+    response: {
+      access_token: '123',
+      token_type: 'bearer',
+      account_id: '123456',
+    },
+    state: { from: '/settings' },
   });
 
   expect(onAuthError.mock.calls.length).toBe(0);

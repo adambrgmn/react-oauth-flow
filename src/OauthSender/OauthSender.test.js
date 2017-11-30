@@ -21,6 +21,7 @@ test('Component: <OauthSender />', () => {
   let expectedUrl = buildURL(`${props.baseUrl}/oauth2/authorize`, {
     client_id: props.clientId,
     redirect_uri: props.redirectUri,
+    response_type: 'code',
   });
 
   expect(wrapper.find('.link').prop('href')).toEqual(expectedUrl);
@@ -29,6 +30,7 @@ test('Component: <OauthSender />', () => {
   expectedUrl = buildURL(`${props.baseUrl}/oauth2/auth`, {
     client_id: props.clientId,
     redirect_uri: props.redirectUri,
+    response_type: 'code',
   });
 
   expect(wrapper.find('.link').prop('href')).toEqual(expectedUrl);
