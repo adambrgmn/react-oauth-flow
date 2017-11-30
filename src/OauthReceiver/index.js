@@ -21,7 +21,7 @@ export class OauthReceiver extends React.Component {
       ]),
     ),
     location: PropTypes.shape({ search: PropTypes.string.isRequired }),
-    querystring: PropTypes.string.isRequired,
+    querystring: PropTypes.string,
     onAuthSuccess: PropTypes.func,
     onAuthError: PropTypes.func,
     render: PropTypes.func,
@@ -33,6 +33,7 @@ export class OauthReceiver extends React.Component {
     tokenEndpoint: '/oauth2/token',
     args: {},
     location: null,
+    querystring: null,
     onAuthSuccess: null,
     onAuthError: null,
     render: null,
@@ -89,9 +90,13 @@ export class OauthReceiver extends React.Component {
 
           this.setState(() => ({ processing: false }));
         })
-        .catch(err => this.handleError(err));
+        .catch(err => {
+          this.handleError(err);
+          this.setState(() => ({ processing: false }));
+        });
     } catch (error) {
       this.handleError(error);
+      this.setState(() => ({ processing: false }));
     }
   };
 
