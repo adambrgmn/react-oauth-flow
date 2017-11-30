@@ -55,6 +55,7 @@ export class OauthSender extends React.Component {
     const url = buildURL(`${baseUrl}${authorizeEndpoint}`, {
       client_id: clientId,
       redirect_uri: redirectUri,
+      response_type: 'code',
       state: state || {},
       args: args || {},
     });
