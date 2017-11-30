@@ -50,7 +50,7 @@ export class OauthReceiver extends React.Component {
     this.getAuthorizationCode();
   }
 
-  getAuthorizationCode = async () => {
+  getAuthorizationCode = () => {
     try {
       const {
         baseUrl,
@@ -79,14 +79,17 @@ export class OauthReceiver extends React.Component {
         ...args,
       });
 
-      const response = await fetch(url, { method: 'POST' });
-      const accessToken = response.access_token;
+      fetch(url, { method: 'POST' })
+        .then(response => {
+          const accessToken = response.access_token;
 
-      if (typeof onAuthSuccess === 'function') {
-        onAuthSuccess(accessToken, { response, state });
-      }
+          if (typeof onAuthSuccess === 'function') {
+            onAuthSuccess(accessToken, { response, state });
+          }
 
-      this.setState(() => ({ processing: false }));
+          this.setState(() => ({ processing: false }));
+        })
+        .catch(err => this.handleError(err));
     } catch (error) {
       this.handleError(error);
     }
