@@ -30,8 +30,8 @@
     "qs": "^6.5.1"
   },
   "peerDependencies": {
-    "react": ">=15",
-    "prop-types": ">=15"
+    "prop-types": ">=15",
+    "react": ">=15"
   },
   "config": {
     "commitizen": {
