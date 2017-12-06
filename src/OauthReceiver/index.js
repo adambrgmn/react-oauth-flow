@@ -118,7 +118,7 @@ export class OauthReceiver extends React.Component {
       search = window.location.search; // eslint-disable-line
     }
 
-    return qs.parse(search);
+    return qs.parse(search, { ignoreQueryPrefix: true });
   };
 
   render() {
