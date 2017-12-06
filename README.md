@@ -263,15 +263,14 @@ overridden when you use the created components.
 
 #### Args
 
-| Arg                         | Type     | Required | Default             | Description                                                                |
-| :-------------------------- | :------- | :------- | :------------------ | :------------------------------------------------------------------------- |
-| `options`                   | `object` | yes      | -                   | Options object                                                             |
-| `options.authorizeUrl`      | `string` | yes      | -                   | The full url to the authorize endpoint, provided by the service            |
-| `options.tokenUrl`          | `string` | yes      | -                   | The full url to the token endpoint, provided by the service                |
-| `options.clientId`          | `string` | yes      | -                   | Your client id from the service provider (remember to keep it secret!)     |
-| `options.clientSecret`      | `string` | yes      | -                   | Your client secret from the service provider (remember to keep it secret!) |
-| `options.authorizeEndpoint` | `string` | no       | `/oauth2/authorize` | Endpoint to send users to authorize                                        |
-| `options.tokenEndpoint`     | `string` | no       | `/oauth2/token`     | Endpoint to send token request to                                          |
+| Arg                    | Type     | Required | Default | Description                                                                |
+| :--------------------- | :------- | :------- | :------ | :------------------------------------------------------------------------- |
+| `options`              | `object` | yes      | -       | Options object                                                             |
+| `options.authorizeUrl` | `string` | yes      | -       | The full url to the authorize endpoint, provided by the service            |
+| `options.tokenUrl`     | `string` | yes      | -       | The full url to the token endpoint, provided by the service                |
+| `options.clientId`     | `string` | yes      | -       | Your client id from the service provider (remember to keep it secret!)     |
+| `options.clientSecret` | `string` | yes      | -       | Your client secret from the service provider (remember to keep it secret!) |
+| `options.redirectUri`  | `string` | yes      | -       | The URL where the provider should redirect your users back                 |
 
 ## License
 
