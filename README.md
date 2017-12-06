@@ -54,7 +54,7 @@ export default class SendToDropbox extends Component {
   render() {
     return (
       <OauthSender
-        baseUrl="https://www.dropbox.com"
+        authorizeUrl="https://www.dropbox.com/oauth2/authorize"
         clientId={process.env.CLIENT_ID}
         redirectUri="https://www.yourapp.com/auth/dropbox"
         state={{ from: '/settings' }}
@@ -70,14 +70,13 @@ service.
 
 #### Props
 
-| Prop                | Type     | Required | Default             | Description                                                                                                         |
-| :------------------ | :------- | :------- | :------------------ | :------------------------------------------------------------------------------------------------------------------ |
-| `baseUrl`           | `string` | yes      | -                   | Base url of your OAuth2 service provider                                                                            |
-| `clientId`          | `string` | yes      | -                   | Your client id from the service provider (remember to keep it secret!)                                              |
-| `redirectUri`       | `string` | yes      | -                   | The URL where the provider should redirect your users back                                                          |
-| `authorizeEndpoint` | `string` | no       | `/oauth2/authorize` | Endpoint for authorization at your provider                                                                         |
-| `state`             | `object` | no       | -                   | Additional state to get back from the service provider [(read more below)](#state)                                  |
-| `args`              | `object` | no       | -                   | Additional args to send to service provider, e.g. `scope`. Will be serialized by [qs](https://github.com/ljharb/qs) |
+| Prop           | Type     | Required | Default | Description                                                                                                         |
+| :------------- | :------- | :------- | :------ | :------------------------------------------------------------------------------------------------------------------ |
+| `authorizeUrl` | `string` | yes      | -       | The full url to the authorize endpoint, provided by the service                                                     |
+| `clientId`     | `string` | yes      | -       | Your client id from the service provider (remember to keep it secret!)                                              |
+| `redirectUri`  | `string` | yes      | -       | The URL where the provider should redirect your users back                                                          |
+| `state`        | `object` | no       | -       | Additional state to get back from the service provider [(read more below)](#state)                                  |
+| `args`         | `object` | no       | -       | Additional args to send to service provider, e.g. `scope`. Will be serialized by [qs](https://github.com/ljharb/qs) |
 
 #### Render
 
@@ -125,7 +124,7 @@ export default class ReceiveFromDropbox extends Component {
   render() {
     return (
       <OauthReceiver
-        baseUrl="https://www.dropbox.com"
+        tokenUrl="https://api.dropbox.com/oauth2/token"
         clientId={process.env.CLIENT_ID}
         clientSecret={process.env.CLIENT_SECRET}
         redirectUri="https://www.yourapp.com/auth/dropbox"
@@ -150,16 +149,15 @@ redirected from the OAuth2-provider.
 
 #### Props
 
-| Prop            | Type                 | Required | Default         | Description                                                                             |
-| :-------------- | :------------------- | :------- | :-------------- | :-------------------------------------------------------------------------------------- |
-| `baseUrl`       | `string`             | yes      | -               | Base url of your OAuth2 service provider                                                |
-| `clientId`      | `string`             | yes      | -               | Your client id from the service provider (remember to keep it secret!)                  |
-| `clientSecret`  | `string`             | yes      | -               | Your client secret from the service provider (remember to keep it secret!)              |
-| `redirectUri`   | `string`             | yes      | -               | The URL where the provider has redirected your user (used to verify auth)               |
-| `tokenEndpoint` | `string`             | no       | `/oauth2/token` | Endpoint for authorization at your provider                                             |
-| `args`          | `object`             | no       | -               | Args will be attatched to the request to the token endpoint. Will be serialized by `qz` |
-| `location`      | `{ search: string }` | no       | -               | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
-| `querystring`   | `string`             | no       | -               | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
+| Prop           | Type                 | Required | Default | Description                                                                             |
+| :------------- | :------------------- | :------- | :------ | :-------------------------------------------------------------------------------------- |
+| `tokenUrl`     | `string`             | yes      | -       | The full url to the token endpoint, provided by the service                             |
+| `clientId`     | `string`             | yes      | -       | Your client id from the service provider (remember to keep it secret!)                  |
+| `clientSecret` | `string`             | yes      | -       | Your client secret from the service provider (remember to keep it secret!)              |
+| `redirectUri`  | `string`             | yes      | -       | The URL where the provider has redirected your user (used to verify auth)               |
+| `args`         | `object`             | no       | -       | Args will be attatched to the request to the token endpoint. Will be serialized by `qz` |
+| `location`     | `{ search: string }` | no       | -       | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
+| `querystring`  | `string`             | no       | -       | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
 
 #### Events
 
@@ -247,7 +245,8 @@ basically it's `window.location.search`. So if it is not provided
 import { createOauthFlow } from 'react-oauth-flow';
 
 const { Sender, Receiver } = createOauthFlow({
-  baseUrl: 'https://www.dropbox.com',
+  authorizeUrl: 'https://www.dropbox.com/oauth2/authorize',
+  tokenUrl: 'https://api.dropbox.com/oauth2/token',
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
   redirectUri: 'https://www.yourapp.com/auth/dropbox',
@@ -267,7 +266,8 @@ overridden when you use the created components.
 | Arg                         | Type     | Required | Default             | Description                                                                |
 | :-------------------------- | :------- | :------- | :------------------ | :------------------------------------------------------------------------- |
 | `options`                   | `object` | yes      | -                   | Options object                                                             |
-| `options.baseUrl`           | `string` | yes      | -                   | Base url of your OAuth2 service provider                                   |
+| `options.authorizeUrl`      | `string` | yes      | -                   | The full url to the authorize endpoint, provided by the service            |
+| `options.tokenUrl`          | `string` | yes      | -                   | The full url to the token endpoint, provided by the service                |
 | `options.clientId`          | `string` | yes      | -                   | Your client id from the service provider (remember to keep it secret!)     |
 | `options.clientSecret`      | `string` | yes      | -                   | Your client secret from the service provider (remember to keep it secret!) |
 | `options.authorizeEndpoint` | `string` | no       | `/oauth2/authorize` | Endpoint to send users to authorize                                        |
