@@ -5,7 +5,7 @@ import { buildURL } from '../utils';
 
 test('Component: <OauthSender />', () => {
   const props = {
-    baseUrl: 'https://www.service.com',
+    authorizeUrl: 'https://www.service.com/oauth2/authorize',
     clientId: 'abc',
     redirectUri: 'https://www.test.com/redirect',
     render: (
@@ -18,17 +18,10 @@ test('Component: <OauthSender />', () => {
   };
 
   const wrapper = shallow(<OauthSender {...props} />);
-  let expectedUrl = buildURL(`${props.baseUrl}/oauth2/authorize`, {
+  const expectedUrl = buildURL(`${props.authorizeUrl}`, {
     client_id: props.clientId,
     redirect_uri: props.redirectUri,
-  });
-
-  expect(wrapper.find('.link').prop('href')).toEqual(expectedUrl);
-
-  wrapper.setProps({ ...props, authorizeEndpoint: '/oauth2/auth' });
-  expectedUrl = buildURL(`${props.baseUrl}/oauth2/auth`, {
-    client_id: props.clientId,
-    redirect_uri: props.redirectUri,
+    response_type: 'code',
   });
 
   expect(wrapper.find('.link').prop('href')).toEqual(expectedUrl);

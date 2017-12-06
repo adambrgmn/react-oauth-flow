@@ -1,12 +1,7 @@
 // @flow
 import qs from 'qs';
-import type { UrlParams } from '../types';
 
-export function buildURL(
-  url: string,
-  params?: UrlParams,
-  paramsSerializer?: (params: UrlParams) => string,
-): string {
+export function buildURL(url, params, paramsSerializer): string {
   if (params == null) return url;
 
   let serializedParams;

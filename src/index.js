@@ -1,4 +1,3 @@
-// @flow
 import { createOauthFlow } from './createOauthFlow';
 import { OauthSender } from './OauthSender';
 import { OauthReceiver } from './OauthReceiver';

@@ -1,19 +1,42 @@
 // @flow
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import qs from 'qs';
 import { buildURL } from '../utils';
 import { fetch } from '../utils/fetch';
-import type { ReceiverProps, UrlParams } from '../types';
 
-type State = {
-  processing: boolean,
-  state: ?UrlParams,
-  error: ?Error,
-};
+export class OauthReceiver extends React.Component {
+  static propTypes = {
+    tokenUrl: PropTypes.string.isRequired,
+    clientId: PropTypes.string.isRequired,
+    clientSecret: PropTypes.string.isRequired,
+    redirectUri: PropTypes.string.isRequired,
+    args: PropTypes.objectOf(
+      PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.bool,
+        PropTypes.object,
+      ]),
+    ),
+    location: PropTypes.shape({ search: PropTypes.string.isRequired }),
+    querystring: PropTypes.string,
+    onAuthSuccess: PropTypes.func,
+    onAuthError: PropTypes.func,
+    render: PropTypes.func,
+    component: PropTypes.element,
+    children: PropTypes.func,
+  };
 
-export class OauthReceiver extends React.Component<ReceiverProps, State> {
   static defaultProps = {
-    tokenEndpoint: '/oauth2/token',
+    args: {},
+    location: null,
+    querystring: null,
+    onAuthSuccess: null,
+    onAuthError: null,
+    render: null,
+    component: null,
+    children: null,
   };
 
   state = {
@@ -26,14 +49,14 @@ export class OauthReceiver extends React.Component<ReceiverProps, State> {
     this.getAuthorizationCode();
   }
 
-  getAuthorizationCode = async () => {
+  getAuthorizationCode = () => {
     try {
       const {
-        baseUrl,
+        tokenUrl,
         clientId,
         clientSecret,
         redirectUri,
-        tokenEndpoint,
+        args,
         onAuthSuccess,
       } = this.props;
 
@@ -45,28 +68,36 @@ export class OauthReceiver extends React.Component<ReceiverProps, State> {
         throw err;
       }
 
-      const url = buildURL(`${baseUrl}${tokenEndpoint}`, {
+      const url = buildURL(`${tokenUrl}`, {
         code,
         grant_type: 'authorization_code',
         client_id: clientId,
         client_secret: clientSecret,
         redirect_uri: redirectUri,
+        ...args,
       });
 
-      const response = await fetch(url, { method: 'POST' });
-      const accessToken: string = response.access_token;
+      fetch(url, { method: 'POST' })
+        .then(response => {
+          const accessToken = response.access_token;
 
-      if (typeof onAuthSuccess === 'function') {
-        onAuthSuccess(accessToken, response);
-      }
+          if (typeof onAuthSuccess === 'function') {
+            onAuthSuccess(accessToken, { response, state });
+          }
 
-      this.setState(() => ({ processing: false }));
+          this.setState(() => ({ processing: false }));
+        })
+        .catch(err => {
+          this.handleError(err);
+          this.setState(() => ({ processing: false }));
+        });
     } catch (error) {
       this.handleError(error);
+      this.setState(() => ({ processing: false }));
     }
   };
 
-  handleError = (error: Error) => {
+  handleError = error => {
     const { onAuthError } = this.props;
 
     this.setState(() => ({ error }));
