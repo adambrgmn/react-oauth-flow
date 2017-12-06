@@ -3,32 +3,23 @@ import { OauthReceiver } from '../OauthReceiver';
 import { OauthSender } from '../OauthSender';
 
 export function createOauthFlow(
-  {
-    baseUrl,
-    clientId,
-    clientSecret,
-    redirectUri,
-    authorizeEndpoint = '/oauth2/authorize',
-    tokenEndpoint = '/oauth2/token',
-  } = {},
+  { authorizeUrl, tokenUrl, clientId, clientSecret, redirectUri } = {},
 ) {
   const Sender = props => (
     <OauthSender
-      baseUrl={baseUrl}
+      authorizeUrl={authorizeUrl}
       clientId={clientId}
       redirectUri={redirectUri}
-      authorizeEndpoint={authorizeEndpoint}
       {...props}
     />
   );
 
   const Receiver = props => (
     <OauthReceiver
-      baseUrl={baseUrl}
+      tokenUrl={tokenUrl}
       clientId={clientId}
       clientSecret={clientSecret}
       redirectUri={redirectUri}
-      tokenEndpoint={tokenEndpoint}
       {...props}
     />
   );

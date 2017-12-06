@@ -5,10 +5,9 @@ import { buildURL } from '../utils';
 
 export class OauthSender extends React.Component {
   static propTypes = {
-    baseUrl: PropTypes.string.isRequired,
+    authorizeUrl: PropTypes.string.isRequired,
     clientId: PropTypes.string.isRequired,
     redirectUri: PropTypes.string.isRequired,
-    authorizeEndpoint: PropTypes.string,
     state: PropTypes.objectOf(
       PropTypes.oneOfType([
         PropTypes.string,
@@ -31,7 +30,6 @@ export class OauthSender extends React.Component {
   };
 
   static defaultProps = {
-    authorizeEndpoint: '/oauth2/authorize',
     state: null,
     args: null,
     render: null,
@@ -41,10 +39,9 @@ export class OauthSender extends React.Component {
 
   render() {
     const {
-      baseUrl,
+      authorizeUrl,
       clientId,
       redirectUri,
-      authorizeEndpoint,
       state,
       args,
       render,
@@ -52,7 +49,7 @@ export class OauthSender extends React.Component {
       children,
     } = this.props;
 
-    const url = buildURL(`${baseUrl}${authorizeEndpoint}`, {
+    const url = buildURL(`${authorizeUrl}`, {
       client_id: clientId,
       redirect_uri: redirectUri,
       response_type: 'code',

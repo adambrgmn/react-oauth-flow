@@ -7,11 +7,10 @@ import { fetch } from '../utils/fetch';
 
 export class OauthReceiver extends React.Component {
   static propTypes = {
-    baseUrl: PropTypes.string.isRequired,
+    tokenUrl: PropTypes.string.isRequired,
     clientId: PropTypes.string.isRequired,
     clientSecret: PropTypes.string.isRequired,
     redirectUri: PropTypes.string.isRequired,
-    tokenEndpoint: PropTypes.string,
     args: PropTypes.objectOf(
       PropTypes.oneOfType([
         PropTypes.string,
@@ -30,7 +29,6 @@ export class OauthReceiver extends React.Component {
   };
 
   static defaultProps = {
-    tokenEndpoint: '/oauth2/token',
     args: {},
     location: null,
     querystring: null,
@@ -54,11 +52,10 @@ export class OauthReceiver extends React.Component {
   getAuthorizationCode = () => {
     try {
       const {
-        baseUrl,
+        tokenUrl,
         clientId,
         clientSecret,
         redirectUri,
-        tokenEndpoint,
         args,
         onAuthSuccess,
       } = this.props;
@@ -71,7 +68,7 @@ export class OauthReceiver extends React.Component {
         throw err;
       }
 
-      const url = buildURL(`${baseUrl}${tokenEndpoint}`, {
+      const url = buildURL(`${tokenUrl}`, {
         code,
         grant_type: 'authorization_code',
         client_id: clientId,
