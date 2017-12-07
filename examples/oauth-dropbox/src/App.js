@@ -1,5 +1,6 @@
+/* eslint-disable no-console */
 import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import { createOauthFlow } from 'react-oauth-flow'; // eslint-disable-line
 import logo from './logo.svg';
 import './App.css';
@@ -42,7 +43,8 @@ class App extends Component {
             render={() => (
               <div>
                 <Sender
-                  render={({ url }) => <a href={url}>Connect ot Dropbox</a>}
+                  state={{ to: '/auth/success' }}
+                  render={({ url }) => <a href={url}>Connect to Dropbox</a>}
                 />
               </div>
             )}
@@ -65,10 +67,16 @@ class App extends Component {
                     return <p style={{ color: 'red' }}>{error.message}</p>;
                   }
 
-                  return <pre>{JSON.stringify(state, null, 2)}</pre>;
+                  return <Redirect to={state.to} />;
                 }}
               />
             )}
+          />
+
+          <Route
+            exact
+            path="/auth/success"
+            render={() => <div>Successfully authorized Dropbox!</div>}
           />
         </div>
       </BrowserRouter>
