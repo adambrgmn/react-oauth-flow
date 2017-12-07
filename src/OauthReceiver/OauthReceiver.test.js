@@ -30,7 +30,7 @@ test('Component <OauthReceiver />', async () => {
     redirectUri: 'https://www.test.com/redirect',
     querystring: `?${qs.stringify({
       code: 'abc',
-      state: { from: '/settings' },
+      state: JSON.stringify({ from: '/settings' }),
     })}`,
     onAuthSuccess,
     onAuthError,
