@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom'; // eslint-disable-line
 import { createOauthFlow } from 'react-oauth-flow'; // eslint-disable-line
 import logo from './logo.svg';
 import './App.css';
