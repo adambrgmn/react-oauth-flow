@@ -53,8 +53,8 @@ export class OauthSender extends React.Component {
       client_id: clientId,
       redirect_uri: redirectUri,
       response_type: 'code',
-      state: state || {},
-      args: args || {},
+      state: state ? JSON.stringify(state) : undefined,
+      ...(args || {}),
     });
 
     if (component != null) {
