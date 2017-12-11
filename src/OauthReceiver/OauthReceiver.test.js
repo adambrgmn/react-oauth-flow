@@ -1,23 +1,29 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import qs from 'qs';
+import nock from 'nock';
 import { OauthReceiver } from './index';
 
-jest.mock('../utils/fetch.js', () => ({
-  fetch2: url => {
-    if (url.includes('https://api.service.com/oauth2/token')) {
-      return Promise.resolve({
-        access_token: '123',
-        token_type: 'bearer',
-        account_id: '123456',
-      });
-    }
-
-    return Promise.reject(new Error('Wrong address'));
-  },
-}));
-
 const delay = dur => new Promise(resolve => setTimeout(resolve, dur));
+
+beforeAll(() => {
+  const api = nock('https://api.service.com/');
+
+  api
+    .post('/oauth2/token')
+    .query({
+      code: 'abc',
+      grant_type: 'authorization_code',
+      client_id: 'abc',
+      client_secret: 'abcdef',
+      redirect_uri: 'https://www.test.com/redirect',
+    })
+    .reply(200, {
+      access_token: '123',
+      token_type: 'bearer',
+      account_id: '123456',
+    });
+});
 
 test('Component <OauthReceiver />', async () => {
   const onAuthSuccess = jest.fn();
@@ -49,7 +55,7 @@ test('Component <OauthReceiver />', async () => {
   );
 
   expect(wrapper.find('.processing').text()).toBe('yes');
-  await delay(0);
+  await delay(10);
   expect(wrapper.find('.processing').text()).toBe('no');
   expect(wrapper.find('.state').text()).toBe('/settings');
 
