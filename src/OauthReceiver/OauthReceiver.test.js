@@ -4,7 +4,7 @@ import qs from 'qs';
 import { OauthReceiver } from './index';
 
 jest.mock('../utils/fetch.js', () => ({
-  fetch: url => {
+  fetch2: url => {
     if (url.includes('https://api.service.com/oauth2/token')) {
       return Promise.resolve({
         access_token: '123',
