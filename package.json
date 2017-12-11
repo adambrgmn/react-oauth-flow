@@ -22,10 +22,11 @@
     "enzyme": "^3.2.0",
     "enzyme-adapter-react-16": "^1.1.0",
     "frans-scripts": "^1.0.1",
+    "isomorphic-fetch": "^2.2.1",
+    "nock": "^9.1.4",
     "prop-types": "^15.6.0",
     "react": "^16.1.1",
-    "react-dom": "^16.1.1",
-    "whatwg-fetch": "^2.0.3"
+    "react-dom": "^16.1.1"
   },
   "dependencies": {
     "qs": "^6.5.1"

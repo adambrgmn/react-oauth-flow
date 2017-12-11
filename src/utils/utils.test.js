@@ -1,4 +1,17 @@
+import nock from 'nock';
 import * as utils from './index';
+
+beforeAll(() => {
+  const api = nock('https://api.github.com/');
+
+  api.get('/users/octocat').reply(200, {
+    login: 'octocat',
+  });
+
+  api.get('/users/404').reply(404, {
+    message: 'User 404 not found',
+  });
+});
 
 test('utils.buildURL', () => {
   const baseUrl = 'https://www.test.com';
@@ -16,14 +29,13 @@ test('utils.buildURL', () => {
   expect(url).toBe(`${baseUrl}?a=hello&b=world`);
 });
 
-test.skip('utils.fetch2', async () => {
-  const url = 'https://api.github.com/users/octocat';
-
-  const data = await utils.fetch2(url);
+test('utils.fetch2', async () => {
+  const data = await utils.fetch2('https://api.github.com/users/octocat');
   expect(data.login).toBe('octocat');
 
   try {
-    await utils.fetch2(`${url}/404-endpoint`);
+    await utils.fetch2('https://api.github.com/users/404');
+    expect(true).toBe(false);
   } catch (err) {
     expect(err.response.ok).toBe(false);
     expect(err.message).toBe('Not Found');
