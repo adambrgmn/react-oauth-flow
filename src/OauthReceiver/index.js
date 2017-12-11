@@ -2,8 +2,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import qs from 'qs';
-import { buildURL } from '../utils';
-import { fetch } from '../utils/fetch';
+import { buildURL, fetch2 } from '../utils';
 
 export class OauthReceiver extends React.Component {
   static propTypes = {
@@ -79,7 +78,7 @@ export class OauthReceiver extends React.Component {
         ...args,
       });
 
-      fetch(url, { method: 'POST' })
+      fetch2(url, { method: 'POST' })
         .then(response => {
           const accessToken = response.access_token;
 
