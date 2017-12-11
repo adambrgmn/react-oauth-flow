@@ -3,7 +3,7 @@ import { OauthReceiver } from '../OauthReceiver';
 import { OauthSender } from '../OauthSender';
 
 export function createOauthFlow(
-  { authorizeUrl, tokenUrl, clientId, clientSecret, redirectUri } = {},
+  { authorizeUrl, tokenUrl, clientId, clientSecret, redirectUri, appName } = {},
 ) {
   const Sender = props => (
     <OauthSender
@@ -20,6 +20,7 @@ export function createOauthFlow(
       clientId={clientId}
       clientSecret={clientSecret}
       redirectUri={redirectUri}
+      appName={appName}
       {...props}
     />
   );

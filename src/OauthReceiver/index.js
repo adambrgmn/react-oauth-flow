@@ -3,6 +3,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import qs from 'qs';
 import { buildURL, fetch2 } from '../utils';
+import pkg from '../../package.json';
 
 export class OauthReceiver extends React.Component {
   static propTypes = {
@@ -10,6 +11,7 @@ export class OauthReceiver extends React.Component {
     clientId: PropTypes.string.isRequired,
     clientSecret: PropTypes.string.isRequired,
     redirectUri: PropTypes.string.isRequired,
+    appName: PropTypes.string,
     args: PropTypes.objectOf(
       PropTypes.oneOfType([
         PropTypes.string,
@@ -31,6 +33,7 @@ export class OauthReceiver extends React.Component {
     args: {},
     location: null,
     querystring: null,
+    appName: pkg.name,
     onAuthSuccess: null,
     onAuthError: null,
     render: null,
@@ -55,6 +58,7 @@ export class OauthReceiver extends React.Component {
         clientId,
         clientSecret,
         redirectUri,
+        appName,
         args,
         onAuthSuccess,
       } = this.props;
@@ -78,7 +82,12 @@ export class OauthReceiver extends React.Component {
         ...args,
       });
 
-      fetch2(url, { method: 'POST' })
+      const headers = new Headers({
+        'User-Agent': appName,
+        Accept: 'application/json',
+      });
+
+      fetch2(url, { method: 'POST', headers })
         .then(response => {
           const accessToken = response.access_token;
 
