@@ -15,3 +15,17 @@ test('utils.buildURL', () => {
   url = utils.buildURL(`${baseUrl}?a=hello`, { b: 'world' });
   expect(url).toBe(`${baseUrl}?a=hello&b=world`);
 });
+
+test('utils.fetch2', async () => {
+  const url = 'https://api.github.com/users/octocat';
+
+  const data = await utils.fetch2(url);
+  expect(data.login).toBe('octocat');
+
+  try {
+    await utils.fetch2(`${url}/404-endpoint`);
+  } catch (err) {
+    expect(err.response.ok).toBe(false);
+    expect(err.message).toBe('Not Found');
+  }
+});

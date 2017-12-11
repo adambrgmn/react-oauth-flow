@@ -1,7 +1,8 @@
 // @flow
 import qs from 'qs';
+import { fetch2 } from './fetch';
 
-export function buildURL(url, params, paramsSerializer): string {
+function buildURL(url, params, paramsSerializer): string {
   if (params == null) return url;
 
   let serializedParams;
@@ -15,3 +16,5 @@ export function buildURL(url, params, paramsSerializer): string {
   if (!serializedParams) return url;
   return `${url}${url.indexOf('?') < 0 ? '?' : '&'}${serializedParams}`;
 }
+
+export { buildURL, fetch2 };
