@@ -6,6 +6,7 @@
 
 * [What is `react-oauth-flow`](#what-is-react-oauth-flow)
 * [Installation](#installation)
+* [Requirements](#requirements)
 * [Usage](#usage)
   * [`<OauthSender />`](#oauthsender-)
   * [`<OauthReceiver />`](#oauthreceiver-)
@@ -42,7 +43,26 @@ There is also a umd-build available for usage directly inside a browser, via
 </script>
 ```
 
+## Requirements
+
+`react-oauth-flow` requires
+[`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) to be
+available on the `window`-object. In modern browsers it's there by default. But
+for older browsers you might need to provide it yourself as a polyfill.
+
+If you are using
+[`create-react-app`](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#supported-language-features-and-polyfills)
+it's already included as a polyfill. Otherwise I recommend
+[`whatwg-fetch`](https://github.com/github/fetch) (which `create-react-app` also
+uses).
+
 ## Usage
+
+`react-oauth-flow` exports three functions:
+
+* [`OauthSender`](#oauthsender-)
+* [`OauthReceiver`](#oauthreceiver-)
+* [`createOauthFlow`](#createoauthflow)
 
 ### `<OauthSender />`
 
@@ -149,15 +169,16 @@ redirected from the OAuth2-provider.
 
 #### Props
 
-| Prop           | Type                 | Required | Default | Description                                                                             |
-| :------------- | :------------------- | :------- | :------ | :-------------------------------------------------------------------------------------- |
-| `tokenUrl`     | `string`             | yes      | -       | The full url to the token endpoint, provided by the service                             |
-| `clientId`     | `string`             | yes      | -       | Your client id from the service provider (remember to keep it secret!)                  |
-| `clientSecret` | `string`             | yes      | -       | Your client secret from the service provider (remember to keep it secret!)              |
-| `redirectUri`  | `string`             | yes      | -       | The URL where the provider has redirected your user (used to verify auth)               |
-| `args`         | `object`             | no       | -       | Args will be attatched to the request to the token endpoint. Will be serialized by `qz` |
-| `location`     | `{ search: string }` | no       | -       | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
-| `querystring`  | `string`             | no       | -       | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
+| Prop           | Type                 | Required | Default            | Description                                                                             |
+| :------------- | :------------------- | :------- | :----------------- | :-------------------------------------------------------------------------------------- |
+| `tokenUrl`     | `string`             | yes      | -                  | The full url to the token endpoint, provided by the service                             |
+| `clientId`     | `string`             | yes      | -                  | Your client id from the service provider (remember to keep it secret!)                  |
+| `clientSecret` | `string`             | yes      | -                  | Your client secret from the service provider (remember to keep it secret!)              |
+| `redirectUri`  | `string`             | yes      | -                  | The URL where the provider has redirected your user (used to verify auth)               |
+| `args`         | `object`             | no       | -                  | Args will be attatched to the request to the token endpoint. Will be serialized by `qz` |
+| `location`     | `{ search: string }` | no       | -                  | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
+| `querystring`  | `string`             | no       | -                  | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
+| `appName`      | `string`             | no       | `react-oauth-flow` | App name mainly used to provide a decent User-Agent header on token-request             |
 
 #### Events
 
@@ -263,14 +284,15 @@ overridden when you use the created components.
 
 #### Args
 
-| Arg                    | Type     | Required | Default | Description                                                                |
-| :--------------------- | :------- | :------- | :------ | :------------------------------------------------------------------------- |
-| `options`              | `object` | yes      | -       | Options object                                                             |
-| `options.authorizeUrl` | `string` | yes      | -       | The full url to the authorize endpoint, provided by the service            |
-| `options.tokenUrl`     | `string` | yes      | -       | The full url to the token endpoint, provided by the service                |
-| `options.clientId`     | `string` | yes      | -       | Your client id from the service provider (remember to keep it secret!)     |
-| `options.clientSecret` | `string` | yes      | -       | Your client secret from the service provider (remember to keep it secret!) |
-| `options.redirectUri`  | `string` | yes      | -       | The URL where the provider should redirect your users back                 |
+| Arg                    | Type     | Required | Default            | Description                                                                 |
+| :--------------------- | :------- | :------- | :----------------- | :-------------------------------------------------------------------------- |
+| `options`              | `object` | yes      | -                  | Options object                                                              |
+| `options.authorizeUrl` | `string` | yes      | -                  | The full url to the authorize endpoint, provided by the service             |
+| `options.tokenUrl`     | `string` | yes      | -                  | The full url to the token endpoint, provided by the service                 |
+| `options.clientId`     | `string` | yes      | -                  | Your client id from the service provider (remember to keep it secret!)      |
+| `options.clientSecret` | `string` | yes      | -                  | Your client secret from the service provider (remember to keep it secret!)  |
+| `options.redirectUri`  | `string` | yes      | -                  | The URL where the provider should redirect your users back                  |
+| `appName`              | `string` | no       | `react-oauth-flow` | App name mainly used to provide a decent User-Agent header on token-request |
 
 ## License
 
