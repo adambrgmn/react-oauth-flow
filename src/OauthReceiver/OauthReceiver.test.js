@@ -82,7 +82,11 @@ describe('with custom token uri fetch args', () => {
   let api = null;
 
   beforeAll(() => {
-    api = nock('https://api.service.com/');
+    api = nock('https://api.service.com/', {
+      reqheaders: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
 
     api
       .get('/oauth2/token')
