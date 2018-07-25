@@ -6,70 +6,115 @@ import { OauthReceiver } from './index';
 
 const delay = dur => new Promise(resolve => setTimeout(resolve, dur));
 
-beforeAll(() => {
-  const api = nock('https://api.service.com/');
+afterAll(() => nock.cleanAll());
 
-  api
-    .post('/oauth2/token')
-    .query({
-      code: 'abc',
-      grant_type: 'authorization_code',
-      client_id: 'abc',
-      client_secret: 'abcdef',
-      redirect_uri: 'https://www.test.com/redirect',
-    })
-    .reply(200, {
-      access_token: '123',
-      token_type: 'bearer',
-      account_id: '123456',
-    });
-});
+describe('with default fetch args', () => {
+  beforeAll(() => {
+    const api = nock('https://api.service.com/');
 
-test('Component <OauthReceiver />', async () => {
-  const onAuthSuccess = jest.fn();
-  const onAuthError = jest.fn();
-
-  const props = {
-    tokenUrl: 'https://api.service.com/oauth2/token',
-    clientId: 'abc',
-    clientSecret: 'abcdef',
-    redirectUri: 'https://www.test.com/redirect',
-    querystring: `?${qs.stringify({
-      code: 'abc',
-      state: JSON.stringify({ from: '/settings' }),
-    })}`,
-    onAuthSuccess,
-    onAuthError,
-  };
-
-  const wrapper = mount(
-    <OauthReceiver
-      {...props}
-      render={({ processing, state }) => (
-        <div>
-          <span className="processing">{processing ? 'yes' : 'no'}</span>
-          <span className="state">{state && state.from}</span>
-        </div>
-      )}
-    />,
-  );
-
-  expect(wrapper.find('.processing').text()).toBe('yes');
-  await delay(10);
-  expect(wrapper.find('.processing').text()).toBe('no');
-  expect(wrapper.find('.state').text()).toBe('/settings');
-
-  const successCall = onAuthSuccess.mock.calls[0];
-  expect(onAuthSuccess.mock.calls.length).toBe(1);
-  expect(successCall[0]).toBe('123');
-  expect(successCall[1]).toEqual({
-    response: {
-      access_token: '123',
-      token_type: 'bearer',
-      account_id: '123456',
-    },
-    state: { from: '/settings' },
+    api
+      .post('/oauth2/token')
+      .query({
+        code: 'abc',
+        grant_type: 'authorization_code',
+        client_id: 'abc',
+        client_secret: 'abcdef',
+        redirect_uri: 'https://www.test.com/redirect',
+      })
+      .reply(200, {
+        access_token: '123',
+        token_type: 'bearer',
+        account_id: '123456',
+      });
   });
 
-  expect(onAuthError.mock.calls.length).toBe(0);
+  test('Component <OauthReceiver />', async () => {
+    const onAuthSuccess = jest.fn();
+    const onAuthError = jest.fn();
+
+    const props = {
+      tokenUrl: 'https://api.service.com/oauth2/token',
+      clientId: 'abc',
+      clientSecret: 'abcdef',
+      redirectUri: 'https://www.test.com/redirect',
+      querystring: `?${qs.stringify({
+        code: 'abc',
+        state: JSON.stringify({ from: '/settings' }),
+      })}`,
+      onAuthSuccess,
+      onAuthError,
+    };
+
+    const wrapper = mount(
+      <OauthReceiver
+        {...props}
+        render={({ processing, state }) => (
+          <div>
+            <span className="processing">{processing ? 'yes' : 'no'}</span>
+            <span className="state">{state && state.from}</span>
+          </div>
+        )}
+      />,
+    );
+
+    expect(wrapper.find('.processing').text()).toBe('yes');
+    await delay(10);
+    expect(wrapper.find('.processing').text()).toBe('no');
+    expect(wrapper.find('.state').text()).toBe('/settings');
+
+    const successCall = onAuthSuccess.mock.calls[0];
+    expect(onAuthSuccess.mock.calls.length).toBe(1);
+    expect(successCall[0]).toBe('123');
+    expect(successCall[1]).toEqual({
+      response: {
+        access_token: '123',
+        token_type: 'bearer',
+        account_id: '123456',
+      },
+      state: { from: '/settings' },
+    });
+
+    expect(onAuthError.mock.calls.length).toBe(0);
+  });
+});
+
+describe('with custom token uri fetch args', () => {
+  let api = null;
+
+  beforeAll(() => {
+    api = nock('https://api.service.com/');
+
+    api
+      .get('/oauth2/token')
+      .query({
+        code: 'abc',
+        grant_type: 'authorization_code',
+        client_id: 'abc',
+        client_secret: 'abcdef',
+        redirect_uri: 'https://www.test.com/redirect',
+      })
+      .reply(200, {});
+  });
+
+  test('Component <OauthReceiver /> with fetch args', async () => {
+    const props = {
+      tokenUrl: 'https://api.service.com/oauth2/token',
+      tokenFetchArgs: {
+        method: 'GET',
+        cache: 'no-cache',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      },
+      clientId: 'abc',
+      clientSecret: 'abcdef',
+      redirectUri: 'https://www.test.com/redirect',
+      querystring: `?${qs.stringify({
+        code: 'abc',
+        state: JSON.stringify({ from: '/settings' }),
+      })}`,
+    };
+
+    mount(<OauthReceiver {...props} render={() => <div />} />);
+
+    expect(api.isDone()).toBe(true);
+  });
 });
