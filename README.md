@@ -169,15 +169,16 @@ redirected from the OAuth2-provider.
 
 #### Props
 
-| Prop           | Type                 | Required | Default | Description                                                                             |
-| :------------- | :------------------- | :------- | :------ | :-------------------------------------------------------------------------------------- |
-| `tokenUrl`     | `string`             | yes      | -       | The full url to the token endpoint, provided by the service                             |
-| `clientId`     | `string`             | yes      | -       | Your client id from the service provider (remember to keep it secret!)                  |
-| `clientSecret` | `string`             | yes      | -       | Your client secret from the service provider (remember to keep it secret!)              |
-| `redirectUri`  | `string`             | yes      | -       | The URL where the provider has redirected your user (used to verify auth)               |
-| `args`         | `object`             | no       | -       | Args will be attatched to the request to the token endpoint. Will be serialized by `qz` |
-| `location`     | `{ search: string }` | no       | -       | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
-| `querystring`  | `string`             | no       | -       | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
+| Prop             | Type                 | Required | Default | Description                                                                             |
+| :--------------- | :------------------- | :------- | :------ | :-------------------------------------------------------------------------------------- |
+| `tokenUrl`       | `string`             | yes      | -       | The full url to the token endpoint, provided by the service                             |
+| `clientId`       | `string`             | yes      | -       | Your client id from the service provider (remember to keep it secret!)                  |
+| `clientSecret`   | `string`             | yes      | -       | Your client secret from the service provider (remember to keep it secret!)              |
+| `redirectUri`    | `string`             | yes      | -       | The URL where the provider has redirected your user (used to verify auth)               |
+| `args`           | `object`             | no       | -       | Args will be attatched to the request to the token endpoint. Will be serialized by `qz` |
+| `location`       | `{ search: string }` | no       | -       | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
+| `querystring`    | `string`             | no       | -       | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
+| `tokenFetchArgs` | `object`             | no       | `{}`    | Used to fetch the token endpoint [(read more below)](#tokenfetchargs)                   |
 
 #### Events
 
@@ -258,6 +259,20 @@ provides you with a `location`-prop with all the information that
 `querystring` can be used if you want some control over the process, but
 basically it's `window.location.search`. So if it is not provided
 `<OauthReceiver />` will fetch the information from `window.location.search`.
+
+#### `tokenFetchArgs`
+
+The prop `tokenFetchArgs` can be used to change how the token is received from
+the service. For example, the token service for Facebook requires a `GET`
+request but the token service for Dropbox requires a `POST` request. You can
+change `tokenFetchArgs` to make this necessary change.
+
+The following are the default fetch args used to fetch the token but they can be
+merged and overriden with the `tokenFetchArgs`:
+
+```
+{ method: 'GET', headers: { 'Content-Type': 'application/json' }}
+```
 
 ### `createOauthFlow`
 
