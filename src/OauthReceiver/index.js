@@ -23,6 +23,9 @@ export class OauthReceiver extends React.Component {
     onAuthSuccess: PropTypes.func,
     onAuthError: PropTypes.func,
     render: PropTypes.func,
+    tokenFetchArgs: PropTypes.shape({
+      method: PropTypes.string,
+    }),
     component: PropTypes.element,
     children: PropTypes.func,
   };
@@ -34,6 +37,7 @@ export class OauthReceiver extends React.Component {
     onAuthSuccess: null,
     onAuthError: null,
     render: null,
+    tokenFetchArgs: {},
     component: null,
     children: null,
   };
@@ -52,6 +56,7 @@ export class OauthReceiver extends React.Component {
     try {
       const {
         tokenUrl,
+        tokenFetchArgs,
         clientId,
         clientSecret,
         redirectUri,
@@ -81,8 +86,10 @@ export class OauthReceiver extends React.Component {
       });
 
       const headers = new Headers({ 'Content-Type': 'application/json' });
+      const defaultFetchArgs = { method: 'POST', headers };
+      const fetchArgs = Object.assign(defaultFetchArgs, tokenFetchArgs);
 
-      fetch2(url, { method: 'POST', headers })
+      fetch2(url, fetchArgs)
         .then(response => {
           const accessToken = response.access_token;
 
