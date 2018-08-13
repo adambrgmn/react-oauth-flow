@@ -66,8 +66,10 @@ export class OauthReceiver extends React.Component {
 
       const queryResult = this.parseQuerystring();
       const { error, error_description, code } = queryResult;
-      const state = JSON.parse(queryResult.state);
-      this.setState(() => ({ state }));
+      const state = JSON.parse(queryResult.state || null);
+      if (state) {
+        this.setState(() => ({ state }));
+      }
 
       if (error != null) {
         const err = new Error(error_description);
