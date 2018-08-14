@@ -10,6 +10,8 @@ node_js:
   - '8'
   - '6'
 
+script: yarn test && yarn build
+
 deploy:
   provider: script
   skip_cleanup: true
