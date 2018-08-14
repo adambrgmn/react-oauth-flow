@@ -1,14 +1,22 @@
 language: node_js
+
 cache: yarn
+
 notifications:
   email: false
+
 node_js:
   - '9'
   - '8'
   - '6'
   - '4'
-after_success:
-  - npx travis-deploy-once "npx semantic-release"
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script:
+    - npx travis-deploy-once "npx semantic-release"
+
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
