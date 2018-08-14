@@ -16,6 +16,17 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "jwright",
+      "name": "Jamie Wright",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/35017?v=4",
+      "profile": "http://tatsu.io",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
-  ]
+  ],
+  "repoType": "github"
 }

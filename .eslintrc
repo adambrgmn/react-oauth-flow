@@ -1,3 +1,18 @@
 {
-  "extends": ["./node_modules/frans-scripts/eslint.js"]
+  "parser": "babel-eslint",
+  "extends": ["airbnb", "prettier"],
+  "env": {
+    "browser": true,
+    "node": true,
+    "commonjs": true,
+    "shared-node-browser": true,
+    "es6": true,
+    "jest": true
+  },
+  "rules": {
+    "import/prefer-default-export": "off",
+    "react/jsx-filename-extension": "off",
+    "react/sort-comp": "off",
+    "react/jsx-one-expression-per-line": "off"
+  }
 }

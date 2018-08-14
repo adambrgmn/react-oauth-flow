@@ -1,29 +1,44 @@
 {
   "name": "react-oauth-flow",
-  "version": "0.0.0-semantically-released",
-  "main": "dist/react-oauth-flow.cjs.js",
-  "jsnext:main": "dist/react-oauth-flow.esm.js",
-  "module": "dist/react-oauth-flow.esm.js",
+  "version": "0.0.0-development",
   "repository": "git@github.com:adambrgmn/react-oauth-flow.git",
   "author": "Adam Bergman <adam@fransvilhelm.com>",
   "license": "MIT",
+  "main": "dist/react-oauth-flow.js",
+  "umd:main": "dist/react-oauth-flow.umd.js",
+  "module": "dist/react-oauth-flow.m.js",
+  "source": "src/index.js",
   "scripts": {
-    "build": "frans-scripts build --bundle",
-    "test": "frans-scripts test",
-    "lint": "frans-scripts lint",
-    "format": "frans-scripts format",
-    "validate": "frans-scripts validate",
-    "add-contributor": "frans-scripts contributors add",
-    "precommit": "frans-scripts precommit",
-    "travis-after-success": "frans-scripts travis-after-success"
+    "build": "microbundle",
+    "test": "jest",
+    "lint": "eslint",
+    "format": "prettier",
+    "contributors": "all-contributors"
   },
   "devDependencies": {
+    "all-contributors-cli": "^5.4.0",
+    "babel-eslint": "^8.2.6",
+    "babel-jest": "^23.4.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
     "cz-conventional-changelog": "^2.1.0",
+    "doctoc": "^1.3.1",
     "enzyme": "^3.2.0",
     "enzyme-adapter-react-16": "^1.1.0",
-    "frans-scripts": "^1.0.1",
+    "eslint": "^5.3.0",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.10.0",
+    "husky": "^1.0.0-rc.13",
     "isomorphic-fetch": "^2.2.1",
+    "jest": "^23.5.0",
+    "lint-staged": "^7.2.2",
+    "microbundle": "^0.6.0",
     "nock": "^9.1.4",
+    "prettier": "^1.14.2",
     "prop-types": "^15.6.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1"
@@ -39,5 +54,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "hooks": {
+    "pre-commit": "lint-staged"
   }
 }

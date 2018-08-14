@@ -1,13 +1,23 @@
 language: node_js
-cache:
-  directories:
-    - ~/.npm
+
+cache: yarn
+
 notifications:
   email: false
+
 node_js:
+  - '9'
   - '8'
-script: npm run validate
-after_success: npm run travis-after-success
+  - '6'
+
+script: yarn test --coverage && yarn build
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script:
+    - npx travis-deploy-once "npx semantic-release"
+
 branches:
   only:
     - master
