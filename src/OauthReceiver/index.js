@@ -4,55 +4,26 @@ import PropTypes from 'prop-types';
 import qs from 'qs';
 import { buildURL, fetch2 } from '../utils';
 
-export class OauthReceiver extends React.Component {
-  static propTypes = {
-    tokenUrl: PropTypes.string.isRequired,
-    clientId: PropTypes.string.isRequired,
-    clientSecret: PropTypes.string.isRequired,
-    redirectUri: PropTypes.string.isRequired,
-    args: PropTypes.objectOf(
-      PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-        PropTypes.bool,
-        PropTypes.object,
-      ]),
-    ),
-    location: PropTypes.shape({ search: PropTypes.string.isRequired }),
-    querystring: PropTypes.string,
-    onAuthSuccess: PropTypes.func,
-    onAuthError: PropTypes.func,
-    render: PropTypes.func,
-    tokenFetchArgs: PropTypes.shape({
-      method: PropTypes.string,
-    }),
-    component: PropTypes.element,
-    children: PropTypes.func,
-  };
+class OauthReceiver extends React.Component {
+  constructor(props) {
+    super(props);
 
-  static defaultProps = {
-    args: {},
-    location: null,
-    querystring: null,
-    onAuthSuccess: null,
-    onAuthError: null,
-    render: null,
-    tokenFetchArgs: {},
-    component: null,
-    children: null,
-  };
+    this.state = {
+      processing: true,
+      state: null,
+      error: null,
+    };
 
-  state = {
-    processing: true,
-    state: null,
-    error: null,
-  };
+    this.getAuthorizationCode = this.getAuthorizationCode.bind(this);
+    this.handleError = this.handleError.bind(this);
+    this.parseQuerystring = this.parseQuerystring.bind(this);
+  }
 
   componentDidMount() {
     this.getAuthorizationCode();
   }
 
-  getAuthorizationCode = () => {
+  getAuthorizationCode() {
     try {
       const {
         tokenUrl,
@@ -65,14 +36,14 @@ export class OauthReceiver extends React.Component {
       } = this.props;
 
       const queryResult = this.parseQuerystring();
-      const { error, error_description, code } = queryResult;
+      const { error, error_description: errorDescription, code } = queryResult;
       const state = JSON.parse(queryResult.state || null);
       if (state) {
         this.setState(() => ({ state }));
       }
 
       if (error != null) {
-        const err = new Error(error_description);
+        const err = new Error(errorDescription);
         throw err;
       }
 
@@ -107,18 +78,18 @@ export class OauthReceiver extends React.Component {
       this.handleError(error);
       this.setState(() => ({ processing: false }));
     }
-  };
+  }
 
-  handleError = error => {
+  handleError(error) {
     const { onAuthError } = this.props;
 
     this.setState(() => ({ error }));
     if (typeof onAuthError === 'function') {
       onAuthError(error);
     }
-  };
+  }
 
-  parseQuerystring = () => {
+  parseQuerystring() {
     const { location, querystring } = this.props;
     let search;
 
@@ -131,7 +102,7 @@ export class OauthReceiver extends React.Component {
     }
 
     return qs.parse(search, { ignoreQueryPrefix: true });
-  };
+  }
 
   render() {
     const { component, render, children } = this.props;
@@ -153,3 +124,42 @@ export class OauthReceiver extends React.Component {
     return null;
   }
 }
+
+OauthReceiver.propTypes = {
+  tokenUrl: PropTypes.string.isRequired,
+  clientId: PropTypes.string.isRequired,
+  clientSecret: PropTypes.string.isRequired,
+  redirectUri: PropTypes.string.isRequired,
+  args: PropTypes.objectOf(
+    PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.bool,
+      PropTypes.object,
+    ]),
+  ),
+  location: PropTypes.shape({ search: PropTypes.string.isRequired }),
+  querystring: PropTypes.string,
+  onAuthSuccess: PropTypes.func,
+  onAuthError: PropTypes.func,
+  render: PropTypes.func,
+  tokenFetchArgs: PropTypes.shape({
+    method: PropTypes.string,
+  }),
+  component: PropTypes.element,
+  children: PropTypes.func,
+};
+
+OauthReceiver.defaultProps = {
+  args: {},
+  location: null,
+  querystring: null,
+  onAuthSuccess: null,
+  onAuthError: null,
+  render: null,
+  tokenFetchArgs: {},
+  component: null,
+  children: null,
+};
+
+export { OauthReceiver };
