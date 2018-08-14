@@ -1,6 +1,6 @@
 {
   "name": "react-oauth-flow",
-  "version": "0.0.0-semantically-released",
+  "version": "0.0.0-development",
   "repository": "git@github.com:adambrgmn/react-oauth-flow.git",
   "author": "Adam Bergman <adam@fransvilhelm.com>",
   "license": "MIT",
