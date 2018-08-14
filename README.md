@@ -314,9 +314,7 @@ MIT
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-
 <!-- prettier-ignore -->
-| [<img src="https://avatars1.githubusercontent.com/u/13746650?v=4" width="100px;"/><br /><sub><b>Adam Bergman</b></sub>](http://fransvilhelm.com)<br />[💻](https://github.com/adambrgmn/react-oauth-flow/commits?author=adambrgmn "Code") [📖](https://github.com/adambrgmn/react-oauth-flow/commits?author=adambrgmn "Documentation") |
-| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-
+| [<img src="https://avatars1.githubusercontent.com/u/13746650?v=4" width="100px;"/><br /><sub><b>Adam Bergman</b></sub>](http://fransvilhelm.com)<br />[💻](https://github.com/adambrgmn/react-oauth-flow/commits?author=adambrgmn "Code") [📖](https://github.com/adambrgmn/react-oauth-flow/commits?author=adambrgmn "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/35017?v=4" width="100px;"/><br /><sub><b>Jamie Wright</b></sub>](http://tatsu.io)<br />[💻](https://github.com/adambrgmn/react-oauth-flow/commits?author=jwright "Code") [📖](https://github.com/adambrgmn/react-oauth-flow/commits?author=jwright "Documentation") |
+| :---: | :---: |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
