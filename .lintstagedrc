@@ -1,0 +1,11 @@
+{
+  "concurrent": false,
+  "linters": {
+    "*.js": [
+      "eslint --fix",
+      "git add",
+      "jest --findRelatedTests --passWithNoTests"
+    ],
+    "*.{js,json,md}": ["prettier --write", "git add"]
+  }
+}
