@@ -1,34 +1,17 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { cleanup, render, waitForElement } from 'react-testing-library';
 import qs from 'qs';
-import nock from 'nock';
 import { OauthReceiver } from './index';
+import { fetch2 } from '../utils/fetch';
 
-const delay = dur => new Promise(resolve => setTimeout(resolve, dur));
+jest.mock('../utils/fetch.js', () => ({
+  fetch2: jest.fn(() => Promise.resolve({ access_token: 'foo' })),
+}));
 
-afterAll(() => nock.cleanAll());
+afterEach(cleanup);
 
-describe('with default fetch args', () => {
-  beforeAll(() => {
-    const api = nock('https://api.service.com/');
-
-    api
-      .post('/oauth2/token')
-      .query({
-        code: 'abc',
-        grant_type: 'authorization_code',
-        client_id: 'abc',
-        client_secret: 'abcdef',
-        redirect_uri: 'https://www.test.com/redirect',
-      })
-      .reply(200, {
-        access_token: '123',
-        token_type: 'bearer',
-        account_id: '123456',
-      });
-  });
-
-  test('Component <OauthReceiver />', async () => {
+describe('Component <OauthReceiver />', () => {
+  test('with default fetch args', async () => {
     const onAuthSuccess = jest.fn();
     const onAuthError = jest.fn();
 
@@ -39,72 +22,38 @@ describe('with default fetch args', () => {
       redirectUri: 'https://www.test.com/redirect',
       querystring: `?${qs.stringify({
         code: 'abc',
-        state: JSON.stringify({ from: '/settings' }),
+        state: JSON.stringify({ from: '/success' }),
       })}`,
       onAuthSuccess,
       onAuthError,
     };
 
-    const wrapper = mount(
+    const { getByTestId } = render(
       <OauthReceiver
         {...props}
         render={({ processing, state }) => (
           <div>
-            <span className="processing">{processing ? 'yes' : 'no'}</span>
-            <span className="state">{state && state.from}</span>
+            {processing && <span data-testid="done">done</span>}
+            <span data-testid="state">{state && state.from}</span>
           </div>
         )}
       />,
     );
 
-    expect(wrapper.find('.processing').text()).toBe('yes');
-    await delay(10);
-    expect(wrapper.find('.processing').text()).toBe('no');
-    expect(wrapper.find('.state').text()).toBe('/settings');
+    await waitForElement(() => getByTestId('done'));
 
-    const successCall = onAuthSuccess.mock.calls[0];
-    expect(onAuthSuccess.mock.calls.length).toBe(1);
-    expect(successCall[0]).toBe('123');
-    expect(successCall[1]).toEqual({
-      response: {
-        access_token: '123',
-        token_type: 'bearer',
-        account_id: '123456',
-      },
-      state: { from: '/settings' },
-    });
+    expect(onAuthSuccess).toHaveBeenCalledTimes(1);
+    expect(onAuthError).not.toHaveBeenCalled();
 
-    expect(onAuthError.mock.calls.length).toBe(0);
-  });
-});
-
-describe('with custom token uri fetch args', () => {
-  let api = null;
-
-  beforeAll(() => {
-    api = nock('https://api.service.com/', {
-      reqheaders: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
-
-    api
-      .get('/oauth2/token')
-      .query({
-        code: 'abc',
-        grant_type: 'authorization_code',
-        client_id: 'abc',
-        client_secret: 'abcdef',
-        redirect_uri: 'https://www.test.com/redirect',
-      })
-      .reply(200, {});
+    expect(getByTestId('state')).toHaveTextContent('/success');
   });
 
-  test('Component <OauthReceiver /> with fetch args', async () => {
+  test('with custom token uri fetch args', async () => {
+    fetch2.mockClear();
+
     const props = {
       tokenUrl: 'https://api.service.com/oauth2/token',
       tokenFetchArgs: {
-        method: 'GET',
         cache: 'no-cache',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       },
@@ -117,8 +66,28 @@ describe('with custom token uri fetch args', () => {
       })}`,
     };
 
-    mount(<OauthReceiver {...props} render={() => <div />} />);
+    const { getByTestId } = render(
+      <OauthReceiver
+        {...props}
+        render={({ processing }) => (
+          <div>{processing && <span data-testid="done">done</span>}</div>
+        )}
+      />,
+    );
 
-    expect(api.isDone()).toBe(true);
+    await waitForElement(() => getByTestId('done'));
+
+    expect(fetch2).toHaveBeenCalledWith(
+      expect.stringContaining(props.tokenUrl),
+      expect.objectContaining({
+        method: expect.stringMatching('POST'),
+        cache: expect.stringMatching('no-cache'),
+        headers: expect.objectContaining({
+          'Content-Type': expect.stringMatching(
+            'application/x-www-form-urlencoded',
+          ),
+        }),
+      }),
+    );
   });
 });
