@@ -1,5 +1,6 @@
 module.exports = {
   setupFiles: ['<rootDir>/tests/setup.js'],
+  setupTestFrameworkScriptFile: '<rootDir>/tests/setup-framework.js',
   collectCoverageFrom: [
     'src/**/*.{js,jsx}',
     '!**/node_modules/**',
