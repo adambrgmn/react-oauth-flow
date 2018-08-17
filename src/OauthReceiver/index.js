@@ -62,7 +62,7 @@ class OauthReceiver extends React.Component {
 
       fetch2(url, fetchArgs)
         .then(response => {
-          const accessToken = response.access_token;
+          const accessToken = response.headers.access_token;
 
           if (typeof onAuthSuccess === 'function') {
             onAuthSuccess(accessToken, { response, state });
