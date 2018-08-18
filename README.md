@@ -179,6 +179,8 @@ redirected from the OAuth2-provider.
 | `location`       | `{ search: string }` | no       | -       | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
 | `querystring`    | `string`             | no       | -       | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
 | `tokenFetchArgs` | `object`             | no       | `{}`    | Used to fetch the token endpoint [(read more below)](#tokenfetchargs)                   |
+| `tokenFn` | `func`             | no       | `null`    | Used to bypass default fetch function to fetch the token [(read more below)](#tokenfn)                   |
+
 
 #### Events
 
@@ -273,6 +275,20 @@ merged and overriden with the `tokenFetchArgs`:
 ```
 { method: 'GET', headers: { 'Content-Type': 'application/json' }}
 ```
+
+#### `tokenFn`
+
+The prop `tokenFn` can be used to change how the token is fetched and received from
+the service. It's a way to bypass the default fetch all together and use your own.
+For example, if your `access-token` comes in the headers instead of the response body
+you will have to use your own fetch function to get those. Or perhaps you already
+have a custom built fetch function that communicates with your backend and you want
+to make use of it.
+
+Your function will receive the `url` from the OauthReceiver, it takes the
+`tokenUrl` and builds it up with all the other needed parameters so you don't have to.
+It will also receive the `tokenFetchArgs` parameter just in case you need it. if you don't,
+just ignore it.
 
 ### `createOauthFlow`
 

@@ -32,6 +32,7 @@ class OauthReceiver extends React.Component {
         clientSecret,
         redirectUri,
         args,
+        tokenFn,
         onAuthSuccess,
       } = this.props;
 
@@ -60,9 +61,11 @@ class OauthReceiver extends React.Component {
       const defaultFetchArgs = { method: 'POST', headers };
       const fetchArgs = Object.assign(defaultFetchArgs, tokenFetchArgs);
 
-      fetch2(url, fetchArgs)
-        .then(response => {
-          const accessToken = response.headers.access_token;
+      (typeof tokenFn === 'function' ?
+        tokenFn(url, fetchArgs) :
+        fetch2(url, fetchArgs)
+      ).then(response => {
+          const accessToken = response.access_token;
 
           if (typeof onAuthSuccess === 'function') {
             onAuthSuccess(accessToken, { response, state });
@@ -140,6 +143,7 @@ OauthReceiver.propTypes = {
   ),
   location: PropTypes.shape({ search: PropTypes.string.isRequired }),
   querystring: PropTypes.string,
+  tokenFn: PropTypes.func,
   onAuthSuccess: PropTypes.func,
   onAuthError: PropTypes.func,
   render: PropTypes.func,
@@ -154,6 +158,7 @@ OauthReceiver.defaultProps = {
   args: {},
   location: null,
   querystring: null,
+  tokenFn: null,
   onAuthSuccess: null,
   onAuthError: null,
   render: null,
