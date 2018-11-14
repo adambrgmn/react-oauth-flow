@@ -137,7 +137,7 @@ export default class ReceiveFromDropbox extends Component {
   };
 
   handleError = error => {
-    console.error('An error occured');
+    console.error('An error occurred');
     console.error(error.message);
   };
 
@@ -154,7 +154,7 @@ export default class ReceiveFromDropbox extends Component {
           <div>
             {processing && <p>Authorizing now...</p>}
             {error && (
-              <p className="error">An error occured: {error.message}</p>
+              <p className="error">An error occurred: {error.message}</p>
             )}
           </div>
         )}
@@ -207,7 +207,7 @@ props/args:
 
 * `processing: boolean`: True if authorization is in progress
 * `state: object`: The state received from provider (might be null)
-* `error: Error`: An error object if an error occured
+* `error: Error`: An error object if an error occurred
 
 ```js
 const RenderProp = props => (
