@@ -1,5 +1,21 @@
 # React OAuth Flow
 
+## Note to users
+
+> As the popularity of this module has grown (modestly) I've realized that all
+> OAuth implementations doesn't look the same. I was naive in thinking that there
+> was some form of standardized simple way of doing this.
+> 
+> So just a heads up – during the winter and spring I will take another look at
+> this and hopefully come up with a library that has some sensible defaults
+> together with the ability to customize it to your needs.
+> 
+> As of now I recommend anyone who wants some customization to run your own fork.
+> And if you have any ideas fow how to rewrite the api of this module – please
+> reach out!
+> 
+> – Adam Bergman
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -179,7 +195,7 @@ redirected from the OAuth2-provider.
 | `location`       | `{ search: string }` | no       | -       | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
 | `querystring`    | `string`             | no       | -       | Used to extract info from querystring [(read more below)](#location-and-querystring)    |
 | `tokenFetchArgs` | `object`             | no       | `{}`    | Used to fetch the token endpoint [(read more below)](#tokenfetchargs)                   |
-| `tokenFn` | `func`             | no       | `null`    | Used to bypass default fetch function to fetch the token [(read more below)](#tokenfn)                   |
+| `tokenFn`        | `func`               | no       | `null`  | Used to bypass default fetch function to fetch the token [(read more below)](#tokenfn)  |
 
 
 #### Events
@@ -332,5 +348,5 @@ MIT
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
 | [<img src="https://avatars1.githubusercontent.com/u/13746650?v=4" width="100px;"/><br /><sub><b>Adam Bergman</b></sub>](http://fransvilhelm.com)<br />[💻](https://github.com/adambrgmn/react-oauth-flow/commits?author=adambrgmn "Code") [📖](https://github.com/adambrgmn/react-oauth-flow/commits?author=adambrgmn "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/35017?v=4" width="100px;"/><br /><sub><b>Jamie Wright</b></sub>](http://tatsu.io)<br />[💻](https://github.com/adambrgmn/react-oauth-flow/commits?author=jwright "Code") [📖](https://github.com/adambrgmn/react-oauth-flow/commits?author=jwright "Documentation") |
-| :---: | :---: |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
