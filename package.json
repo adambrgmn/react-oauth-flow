@@ -9,7 +9,7 @@
   "module": "dist/react-oauth-flow.m.js",
   "source": "src/index.js",
   "scripts": {
-    "build": "microbundle",
+    "build": "microbundle --jsx React.createElement",
     "test": "jest",
     "lint": "eslint",
     "format": "prettier",
