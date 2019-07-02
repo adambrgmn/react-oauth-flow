@@ -57,7 +57,7 @@ class OauthReceiver extends React.Component {
         ...args,
       });
 
-      const headers = new Headers({ 'Content-Type': 'application/json' });
+      const headers = new Headers({ 'Content-Type': 'application/x-www-from-urlencoded' });
       const defaultFetchArgs = { method: 'POST', headers };
       const fetchArgs = Object.assign(defaultFetchArgs, tokenFetchArgs);
 
