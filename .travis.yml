@@ -1,0 +1,28 @@
+language: node_js
+
+node_js:
+  - 8
+
+cache:
+  yarn: true
+  directories:
+    - node_modules
+
+notifications:
+  email: false
+
+script: yarn run test && yarn run build
+
+branches:
+  only:
+    - master
+
+jobs:
+  include:
+    - stage: release
+      node_js: lts/*
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script:
+          - yarn run semantic-release
